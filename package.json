@@ -1,6 +1,10 @@
 {
   "name": "draw-app",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ViSiOnOp19cr/draw_app.git"
+  },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
