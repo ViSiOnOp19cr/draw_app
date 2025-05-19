@@ -1,8 +1,7 @@
 import express, { Request, Response } from 'express';
-import { User } from '../models/User';
+import { prisma } from '@repo/db';
 import { generateToken } from '../utils/jwt';
-import { Op } from 'sequelize';
-import { SignUpSchema, SignInSchema } from '@repo/common';
+import { SignUpSchema, SignInSchema, User } from '@repo/common';
 
 const router: express.Router = express.Router();
 
@@ -13,9 +12,9 @@ router.post('/signup', async (req: Request, res: Response) => {
       const { email, password, name } = SignUpSchema.parse(req.body);
 
     // Check if user already exists
-    const existingUser = await User.findOne({ 
+    const existingUser = await prisma.user.findFirst({ 
       where: { 
-        [Op.or]: [{ email }] 
+        email
       } 
     });
 
