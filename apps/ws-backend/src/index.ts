@@ -2,10 +2,10 @@ import { WebSocketServer, WebSocket } from "ws";
 import { parse } from "url";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { JWT_SECRET } from "@repo/backend-common";
 
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'draw-app-secret-key';
 
 interface AuthenticatedWebSocket extends WebSocket {
   userId?: string;

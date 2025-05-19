@@ -27,6 +27,10 @@ export class RoomParticipant extends Model {
   @BelongsTo(() => Room)
   room!: Room;
 
-  @CreatedAt
+
+  @Column({
+    type: DataType.DATE,
+    allowNull: false
+  })
   joinedAt!: Date;
 } 

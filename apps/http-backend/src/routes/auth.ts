@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { User } from '../models/User';
 import { generateToken } from '../utils/jwt';
 import { Op } from 'sequelize';
+import { SignUpSchema, SignInSchema } from '@repo/common';
 
 const router: express.Router = express.Router();
 
@@ -9,12 +10,12 @@ const router: express.Router = express.Router();
 //@ts-ignore
 router.post('/signup', async (req: Request, res: Response) => {
   try {
-    const { username, email, password } = req.body;
+      const { email, password, name } = SignUpSchema.parse(req.body);
 
     // Check if user already exists
     const existingUser = await User.findOne({ 
       where: { 
-        [Op.or]: [{ username }, { email }] 
+        [Op.or]: [{ email }] 
       } 
     });
 
@@ -24,15 +25,15 @@ router.post('/signup', async (req: Request, res: Response) => {
 
     // Create new user
     const user = await User.create({
-      username,
       email,
-      password
+      password,
+      name
     });
 
     // Generate JWT token
     const token = generateToken({ 
       id: user.id, 
-      username: user.username 
+      email: user.email 
     });
 
     res.status(201).json({
@@ -40,8 +41,8 @@ router.post('/signup', async (req: Request, res: Response) => {
       token,
       user: {
         id: user.id,
-        username: user.username,
-        email: user.email
+        email: user.email,
+        name: user.name
       }
     });
   } catch (error) {
@@ -54,7 +55,7 @@ router.post('/signup', async (req: Request, res: Response) => {
 // @ts-ignore
 router.post('/signin', async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = SignInSchema.parse(req.body);
 
     // Find user by email
     const user = await User.findOne({ where: { email } });
@@ -73,7 +74,7 @@ router.post('/signin', async (req: Request, res: Response) => {
     // Generate JWT token
     const token = generateToken({ 
       id: user.id, 
-      username: user.username 
+      email: user.email 
     });
 
     res.json({
@@ -81,8 +82,8 @@ router.post('/signin', async (req: Request, res: Response) => {
       token,
       user: {
         id: user.id,
-        username: user.username,
-        email: user.email
+        email: user.email,
+        name: user.name
       }
     });
   } catch (error) {

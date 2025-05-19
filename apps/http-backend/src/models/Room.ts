@@ -26,8 +26,6 @@ export class Room extends Model {
   @BelongsToMany(() => User, () => RoomParticipant)
   participants!: User[];
 
-  @CreatedAt
-  createdAt!: Date;
 
   @Column({
     type: DataType.BOOLEAN,

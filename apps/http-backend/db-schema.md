@@ -2,7 +2,7 @@
 
 ## User Table
 - `id` (PK): Integer, Auto-increment
-- `username`: String, Unique, Not Null
+- `name`: String, Unique, Not Null
 - `email`: String, Unique, Not Null
 - `password`: String, Not Null (hashed)
 - `createdAt`: Timestamp

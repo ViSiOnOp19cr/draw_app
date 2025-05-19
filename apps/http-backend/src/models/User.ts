@@ -11,7 +11,7 @@ export class User extends Model {
     allowNull: false,
     unique: true
   })
-  username!: string;
+  name!: string;
 
   @Column({
     type: DataType.STRING,
@@ -29,11 +29,11 @@ export class User extends Model {
   })
   password!: string;
 
-  @CreatedAt
-  createdAt!: Date;
-
-  @BeforeCreate
-  @BeforeUpdate
+  @Column({
+    type: DataType.DATE,
+    defaultValue: DataType.NOW
+  })
+ 
   static async hashPassword(instance: User) {
     if (instance.changed('password')) {
       const salt = await bcrypt.genSalt(10);
