@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { prisma } from '@repo/db';
 import { generateToken } from '../utils/jwt';
-import { SignUpSchema, SignInSchema, User } from '@repo/common';
+import { SignUpSchema, SignInSchema } from '@repo/common';
 
 const router: express.Router = express.Router();
 
@@ -12,7 +12,7 @@ router.post('/signup', async (req: Request, res: Response) => {
       const { email, password, name } = SignUpSchema.parse(req.body);
 
     // Check if user already exists
-    const existingUser = await prisma.user.findFirst({ 
+    const existingUser = await prisma.User.findFirst({ 
       where: { 
         email
       } 
@@ -23,10 +23,12 @@ router.post('/signup', async (req: Request, res: Response) => {
     }
 
     // Create new user
-    const user = await User.create({
-      email,
-      password,
-      name
+    const user = await prisma.User.create({
+      data:{
+        email,
+        password,
+        name
+      }
     });
 
     // Generate JWT token
@@ -56,14 +58,12 @@ router.post('/signin', async (req: Request, res: Response) => {
   try {
     const { email, password } = SignInSchema.parse(req.body);
 
-    // Find user by email
-    const user = await User.findOne({ where: { email } });
+    const user = await prisma.User.findFirst({ where: { email } });
     
     if (!user) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    // Verify password
     const isMatch = await user.comparePassword(password);
     
     if (!isMatch) {

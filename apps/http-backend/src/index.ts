@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { initializeDatabase } from "./config/database";
 import authRoutes from "./routes/auth";
-import roomRoutes from "./routes/rooms";
+
 
 dotenv.config();
 
