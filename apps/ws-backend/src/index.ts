@@ -1,10 +1,9 @@
 import { WebSocketServer, WebSocket } from "ws";
 import { parse } from "url";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-import { JWT_SECRET } from "@repo/backend-common";
+import { JWT_SECRET } from "@repo/backend-common/config";
 
-dotenv.config();
+
 
 
 interface AuthenticatedWebSocket extends WebSocket {
